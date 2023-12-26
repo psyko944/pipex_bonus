@@ -1,0 +1,9 @@
+file.txt
+Inc
+libft
+Makefile
+newin.txt
+newstd.txt
+open.txt
+pipex
+srcs
