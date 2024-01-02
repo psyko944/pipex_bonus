@@ -1,10 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_cmd.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mekherbo <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/12/27 18:34:03 by mekherbo          #+#    #+#             */
+/*   Updated: 2023/12/28 23:45:27 by mekherbo         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #include "pipex.h"
 
 static char	**get_paths(char **envp)
 {
-	char  **paths;
-	char  *path;
-	char  *tmp;
+	char	**paths;
+	char	*path;
+	char	*tmp;
 	int		i;
 
 	i = -1;
@@ -19,7 +30,7 @@ static char	**get_paths(char **envp)
 	}
 	paths = ft_split(path, ':');
 	i = -1;
-	while(paths[++i])
+	while (paths[++i])
 	{
 		tmp = paths[i];
 		paths[i] = ft_strjoin(paths[i], "/");
@@ -28,10 +39,10 @@ static char	**get_paths(char **envp)
 	return (paths);
 }
 
-char  *get_cmd_path(char  **paths, char *cmd)
+char	*get_cmd_path(char **paths, char *cmd)
 {
-	int	i;
-	char  *cmd_path;
+	int		i;
+	char	*cmd_path;
 
 	i = -1;
 	while (paths[++i])
@@ -49,11 +60,11 @@ char  *get_cmd_path(char  **paths, char *cmd)
 	return (NULL);
 }
 
-char  *get_cmd(char *cmd, t_data *data)
+char	*get_cmd(char *cmd, t_data *data)
 {
-	char  **paths;
-	char  *cmd_path;
-	int	  i;
+	char	**paths;
+	char	*cmd_path;
+	int		i;
 
 	i = 0;
 	if (access(cmd, F_OK | X_OK) == 0)
