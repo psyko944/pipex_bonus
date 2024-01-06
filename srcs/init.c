@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 #include "pipex.h"
+#include <stdlib.h>
 
 static void	clean_struct(t_data *data)
 {
@@ -22,6 +23,8 @@ static void	clean_struct(t_data *data)
 	data->is_first = 0;
 	data->cmd_path = NULL;
 	data->cmd_options = NULL;
+	data->filename = NULL;
+	data->exit_status = 0;
 }
 
 static void	runtime_heredoc(t_data *data)
@@ -51,26 +54,13 @@ static void	init_heredoc(t_data *data)
 {
 	data->delimiter = data->av[2];
 	if (pipe(data->heredoc_fd) == -1)
-		exit_error("pipe", data);
+		exit_error("pipe", data, 0);
 	runtime_heredoc(data);
-	if (data->is_bonus)
-	{
-		data->fd_out = open(data->av[data->ac - 1], O_CREAT
-				| O_WRONLY | O_APPEND, 0644);
-		if (data->fd_out == -1)
-			exit(EXIT_FAILURE);
-	}
-	else
-	{
-		data->fd_out = open(data->av[data->ac - 1], O_CREAT
-				| O_WRONLY | O_TRUNC, 0644);
-		if (data->fd_out == -1)
-			exit(EXIT_FAILURE);
-	}
 	data->fd_in = data->heredoc_fd[0];
 	if (data->fd_in == -1)
 		exit(EXIT_FAILURE);
 	close(data->heredoc_fd[1]);
+	data->file_exit = data->av[data->ac -1];
 	data->av++;
 }
 
@@ -85,12 +75,8 @@ static void	init_struct(t_data *data, int ac, char **av, char**envp)
 		init_heredoc(data);
 	else
 	{
-		data->fd_in = open(av[1], O_RDONLY);
-		if (data->fd_in == -1)
-			exit_error(av[1], data);
-		data->fd_out = open(av[ac - 1], O_CREAT | O_WRONLY | O_TRUNC, 0644);
-		if (data->fd_out == -1)
-			exit_error(av[ac - 1], data);
+		data->filename = av[1];
+		data->file_exit = av[ac -1];
 	}
 }
 
@@ -103,8 +89,10 @@ void	init_main(t_data *data, int ac, char **av, char **envp)
 	if (!ft_strncmp(av[1], "here_doc", ft_strlen(av[1]))
 		&& data->is_bonus && ac > 1)
 		data->is_heredoc = 1;
+	if (!data->is_bonus && ac != 5)
+	{
+		ft_putstr_fd(ARG_0BONUS, 1);
+		exit(EXIT_FAILURE);
+	}
 	init_struct(data, ac, av, envp);
-	dup2(data->fd_in, STDIN_FILENO);
-	if (data->fd_in != -1)
-		close(data->fd_in);
 }

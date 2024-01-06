@@ -23,6 +23,7 @@
 # include "../libft/libft.h"
 
 # define ARG_ERROR "too few arguments\n./pipex file1 cmd1 cmd2 ... cmdn file2\n"  
+# define ARG_0BONUS "./pipex infile cmd1 cmd2 outfile\n"  
 
 /*        struct        */
 
@@ -42,12 +43,16 @@ typedef struct s_data
 	int		is_last;
 	int		is_heredoc;
 	int		is_bonus;
+	int		exit_status;
 	char	*delimiter;
+	char	*filename;
+	char	*file_exit;
 }	t_data;
 
 char	*get_cmd(char *cmd, t_data *data);
 void	free_strs(char *str, char **tab);
-void	init_main(t_data *sata, int ac, char **av, char **envp);
-void	exit_error(char *msg, t_data *data);
+void	close_fds(t_data *data);
+void	init_main(t_data *data, int ac, char **av, char **envp);
+void	exit_error(char *msg, t_data *data, int flag);
 
 #endif

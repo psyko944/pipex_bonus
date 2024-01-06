@@ -48,7 +48,7 @@ CFLAGS = -Wall -Wextra -Werror -g3
 	@${CC} ${CFLAGS} -c -I ${INC_DIR} $< -o ${<:.c=.o}
 	@echo "$(YELLOW)Compiling: $< $(DEF_COLOR)"
 
-all:
+all:	$(NAME)
 	@echo "$(PURPLE)$(S1)\n"
 	@echo "$(PURPLE)██████╗ ██╗██████╗ ███████╗██╗  ██╗"
 	@echo "$(PURPLE)██╔══██╗██║██╔══██╗██╔════╝╚██╗██╔╝"
@@ -57,8 +57,6 @@ all:
 	@echo "$(PURPLE)██║     ██║██║     ███████╗██╔╝ ██╗"
 	@echo "$(PURPLE)╚═╝     ╚═╝╚═╝     ╚══════╝╚═╝  ╚═╝"
 	@echo "\n$(PURPLE)$(S1)$(RESET)"
-
-	@$(MAKE) -j $(NAME)
 	@echo "$(GREEN)pipex compiled!$(DEF_COLOR)"
 
 ${LIBFT}:

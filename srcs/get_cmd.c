@@ -72,7 +72,10 @@ char	*get_cmd(char *cmd, t_data *data)
 	paths = get_paths(data->envp);
 	cmd_path = get_cmd_path(paths, cmd);
 	if (!cmd_path)
+	{
+		free_strs(NULL, paths);
 		return (NULL);
+	}
 	free_strs(NULL, paths);
 	return (cmd_path);
 }
