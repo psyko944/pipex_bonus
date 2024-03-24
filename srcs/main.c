@@ -3,13 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mekherbo <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mekherbo <mekherbo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 18:33:48 by mekherbo          #+#    #+#             */
-/*   Updated: 2023/12/28 23:54:23 by mekherbo         ###   ########.fr       */
+/*   Updated: 2024/03/24 14:54:44 by mekherbo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "pipex.h"
+
+static int	wait_cmd(t_data *data)
+{
+	int	exit_code;
+
+	while (errno != ECHILD)
+	{
+		if (wait(&data->wstatus) == data->last)
+		{
+			if (WIFEXITED(data->wstatus))
+				exit_code = WEXITSTATUS(data->wstatus);
+			else
+				exit_code = 128 + WTERMSIG(data->wstatus);
+		}
+	}
+	return (exit_code);
+}
 
 static void	child_runtime(t_data *data)
 {
@@ -27,11 +45,13 @@ static void	child_runtime(t_data *data)
 	{
 		if (execve(data->cmd_path, data->cmd_options, data->envp) == -1)
 		{
+			perror(data->cmd_path);
 			free_strs(data->cmd_path, data->cmd_options);
 			exit(EXIT_FAILURE);
 		}
 	}
 	free_strs(data->cmd_path, data->cmd_options);
+	//fprintf(stderr ,"exit status %d\n", data->exit_status);
 	exit(data->exit_status);
 }
 
@@ -96,6 +116,11 @@ static void	runtime(t_data *data, int i)
 	if (pipe(data->fd) == -1)
 		exit_error("pipe", data, 0);
 	pid = fork();
+	if (data->is_last && pid != 0)
+	{
+		data->last = pid;
+		//printf("last pid id %d\n", data->last);
+	}
 	if (pid == -1)
 		exit_error("fork", data, 0);
 	else if (pid == 0 && !data->is_last)
@@ -133,8 +158,10 @@ int	main(int ac, char **av, char **envp)
 			close(data.fd_in);
 		if (data.fd_out != -1)
 			close(data.fd_out);
+		//while (wait(NULL) != -1)
+		//	continue ;
 	}
 	else
 		return (ft_putstr_fd(ARG_ERROR, 1), 1);
-	return (0);
+	return (wait_cmd(&data));
 }

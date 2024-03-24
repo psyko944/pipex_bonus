@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mekherbo <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mekherbo <mekherbo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/27 18:35:04 by mekherbo          #+#    #+#             */
-/*   Updated: 2023/12/28 23:43:31 by mekherbo         ###   ########.fr       */
+/*   Updated: 2024/03/23 18:52:42 by mekherbo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #ifndef PIPEX_H
 # define PIPEX_H
 /*        libraries     */
@@ -42,6 +43,8 @@ typedef struct s_data
 	int		is_first;
 	int		is_last;
 	int		is_heredoc;
+	int		wstatus;
+	int		last;
 	int		is_bonus;
 	int		exit_status;
 	char	*delimiter;

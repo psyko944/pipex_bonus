@@ -6,7 +6,7 @@
 #    By: mekherbo <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/27 18:35:35 by mekherbo          #+#    #+#              #
-#    Updated: 2023/12/27 18:35:37 by mekherbo         ###   ########.fr        #
+#    Updated: 2024/03/21 17:28:43 by mekherbo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 NAME = pipex
@@ -39,13 +39,13 @@ CC = clang
 
 RM = rm -f
 
-INC_DIR = Inc
+INC_DIR = includes
 LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/libft.a
 CFLAGS = -Wall -Wextra -Werror -g3
 
 .c.o:
-	@${CC} ${CFLAGS} -c -I ${INC_DIR} $< -o ${<:.c=.o}
+	${CC} ${CFLAGS} -c -I $(INC_DIR) $< -o ${<:.c=.o}
 	@echo "$(YELLOW)Compiling: $< $(DEF_COLOR)"
 
 all:	$(NAME)

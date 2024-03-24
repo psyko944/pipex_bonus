@@ -35,7 +35,7 @@ void	cleanup(char *line, char *keep)
 char	*get_next_line(int fd)
 {
 	char		*line;
-	static char	keep[BUFFER_SIZE + 1];
+	static char	keep[BUFFER_SIZE + 1] = {0};
 
 	line = NULL;
 	if (keep[0] != 0)
